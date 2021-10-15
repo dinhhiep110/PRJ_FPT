@@ -58,7 +58,6 @@ public class LoginController extends HttpServlet {
         else{
             request.getSession().setAttribute("account", account);
              response.getWriter().println("LoginSuccess!");
-            response.sendRedirect("student/list");
         } 
     }
 

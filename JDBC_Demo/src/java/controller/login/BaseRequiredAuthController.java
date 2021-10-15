@@ -10,6 +10,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import model.Account;
+import model.Feature;
 
 /**
  *
@@ -27,7 +29,17 @@ public abstract class BaseRequiredAuthController extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     private boolean isAuthenticated(HttpServletRequest request){
-        return request.getSession().getAttribute("account") != null;  
+        Account account = (Account) request.getSession().getAttribute("account");
+        if(account == null){
+            return false;
+        }
+        String url = request.getServletPath();
+        for (Feature feature : account.getFeature()) {
+            if (feature.getUrl().equals(url)) {
+                return true;
+            }
+        }
+        return false;
     }
     
     @Override

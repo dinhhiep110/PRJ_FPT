@@ -12,6 +12,7 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.Account;
+import model.Feature;
 
 /**
  *
@@ -20,25 +21,35 @@ import model.Account;
 public class LoginDBContext extends DBContext{
     public Account getAcount(String username,String password){
         try {
-            String sql = "SELECT [username]\n" +
-                    "      ,[password]\n" +
-                    "      ,[displayname]\n" +
-                    "  FROM [Account]\n" +
-                    "  where username = ? and password = ?";
-            
+            String sql = "Select a.username,a.password,a.displayname,f.fid,f.furl from Account a \n" +
+                "left join GroupAccount ga on a.username = ga.username\n" +
+                "left join [Group] g on ga.grid = g.grid\n" +
+                "left join GroupFeature gf on gf.grid = g.grid\n" +
+                "left join Feature f on gf.fid = f.fid\n" +
+                "where a.username = ? and a.password = ?";
+
             PreparedStatement stm = connection.prepareStatement(sql);
             stm.setString(1, username);
             stm.setString(2, password);
             ResultSet rs = stm.executeQuery();
-            if(rs.next()){
-                Account account = new Account();
-                account.setUsername(rs.getString("username"));
-                account.setPassword(rs.getString("password"));
-                account.setDisplayName(rs.getString("displayname"));
-                return account;
+            Account  account = null;
+            while(rs.next()){
+                if (account == null) {
+                    account = new Account();
+                    account.setUsername(rs.getString("username"));
+                    account.setPassword(rs.getString("password"));
+                    account.setDisplayName(rs.getString("displayname"));
+                }
+                int fid = rs.getInt("fid");
+                if(fid != 0){
+                    Feature f = new Feature();
+                    f.setFid(fid);
+                    f.setUrl(rs.getString("furl"));
+                    account.getFeature().add(f);
+                }   
             }
             
-            
+            return account;
            
         } catch (SQLException ex) {
             Logger.getLogger(LoginDBContext.class.getName()).log(Level.SEVERE, null, ex);
