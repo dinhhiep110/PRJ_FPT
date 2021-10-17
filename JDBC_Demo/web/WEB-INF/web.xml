@@ -40,6 +40,10 @@
         <servlet-name>SearchByDeptController</servlet-name>
         <servlet-class>controller.student.SearchByDeptController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>CertificateController</servlet-name>
+        <servlet-class>controller.student.CertificateController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>ListController</servlet-name>
         <url-pattern>/student/list</url-pattern>
@@ -79,6 +83,10 @@
     <servlet-mapping>
         <servlet-name>SearchByDeptController</servlet-name>
         <url-pattern>/student/searchByDept</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CertificateController</servlet-name>
+        <url-pattern>/certificate</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

@@ -509,7 +509,64 @@ public class StudentDBContext extends DBContext {
        
         return students;
         
-    }   
+    }
     
+    public ArrayList<Student> getSearchCertificate(String cids[]){
+        ArrayList<Student> list = new ArrayList<>();
+        try {
+            String sql = "Select distinct s.id,s.name,s.dob,s.gender,d.did,d.dname,c.cid,c.name as cname from Student s \n" +
+                        "left join Department d on s.did = d.did\n" +
+                        "left join StudentCertificate sc on s.id = sc.sid\n" +
+                        "left join Certificate c on sc.cid = c.cid\n";
+            if(cids != null){
+                sql += "Where c.cid = ? ";
+                for (int i = 1;i < cids.length;i++) {
+                    sql += "or c.cid = ? ";
+                } 
+            }
+            sql += " order by s.name asc";
+            PreparedStatement stm = connection.prepareStatement(sql);
+            if(cids != null){
+                int count = 0;
+                while(count < cids.length){
+                    stm.setInt(count + 1, Integer.parseInt(cids[count]));
+                    count += 1;
+                }
+            } 
+            ResultSet rs = stm.executeQuery();
+            Student s = new Student();
+            s.setId(-1);
+            while (rs.next()) {                
+                int sid = rs.getInt("id");
+                if (s.getId() != sid) {
+                    s = new Student();
+                    s.setId(sid);
+                    s.setName(rs.getString("name"));
+                    s.setDob(rs.getDate("dob"));
+                    s.setGender(rs.getBoolean("gender"));
+                    Department d = new Department();
+                    d.setDid(rs.getInt("did"));
+                    d.setDname(rs.getString("dname"));
+                    s.setDepartment(d);
+                    list.add(s);
+                }
+                int cid = rs.getInt("cid");
+                if (cid != 0) {
+                    StudentCertificate sc = new StudentCertificate();
+                    Certificate c = new Certificate();
+                    c.setCid(cid);
+                    c.setName(rs.getString("cname"));
+                    sc.setCertificate(c);
+                    sc.setStudent(s);
+                    s.getCerts().add(sc);
+                }
+            }
+
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(StudentDBContext.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return list;
+    }
 }
 
