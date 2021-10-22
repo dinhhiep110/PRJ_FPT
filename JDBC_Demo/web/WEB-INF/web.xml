@@ -44,6 +44,10 @@
         <servlet-name>CertificateController</servlet-name>
         <servlet-class>controller.student.CertificateController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>DummyListController</servlet-name>
+        <servlet-class>controller.dummy.ListController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>ListController</servlet-name>
         <url-pattern>/student/list</url-pattern>
@@ -87,6 +91,10 @@
     <servlet-mapping>
         <servlet-name>CertificateController</servlet-name>
         <url-pattern>/certificate</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DummyListController</servlet-name>
+        <url-pattern>/dummy/list</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
