@@ -7,6 +7,7 @@ package controller.login;
 
 import dal.LoginDBContext;
 import java.io.IOException;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -59,6 +60,10 @@ public class LoginController extends HttpServlet {
             request.getSession().setAttribute("account", account);
              response.getWriter().println("LoginSuccess!");
         } 
+        ServletContext ctx = getServletContext();  
+        int t=(Integer)ctx.getAttribute("totalusers");  
+        lgdb.insert(t);
+       
     }
 
     /**

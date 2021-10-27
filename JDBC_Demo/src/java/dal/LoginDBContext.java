@@ -56,4 +56,16 @@ public class LoginDBContext extends DBContext{
         }
         return null;
     }
+    
+    public void insert(int totalusers){
+        try {
+            String sql = "Insert into CountTotalLogin([count])"
+                    + "values(?)";
+            PreparedStatement stm = connection.prepareStatement(sql);
+            stm.setInt(1, totalusers);
+            stm.executeUpdate(); 
+        } catch (SQLException ex) {
+            Logger.getLogger(LoginDBContext.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 }

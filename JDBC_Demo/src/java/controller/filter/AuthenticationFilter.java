@@ -39,18 +39,16 @@ public class AuthenticationFilter implements Filter {
 		String uri = req.getRequestURI();
 		this.context.log("Requested Resource::"+uri);
 		
-		HttpSession session = req.getSession(false);
+		HttpSession session = req.getSession();
 		
 		if(session == null ){
-			this.context.log("Unauthorizedaccess request"); 
-                        res.getWriter().println("Unauthorizedaccess request");
-			res.sendRedirect("../login");
+                    this.context.log("Unauthorizedaccess request"); 
+                    res.getWriter().println("Unauthorizedaccess request");
+                    res.sendRedirect("../login");
 		}else{
 			// pass the request along the filter chain
-			chain.doFilter(request, response);
-		}
-		
-		
+                    chain.doFilter(request, response);
+		}		
 	}
 
         @Override

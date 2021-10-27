@@ -8,6 +8,14 @@
         <filter-name>AuthenticationFilter</filter-name>
         <url-pattern>/student/*</url-pattern>
     </filter-mapping>
+    <listener>
+        <description>ServletContextListener</description>
+        <listener-class>controller.eventslistener.MyListener</listener-class>
+    </listener>
+    <listener>
+        <description>HttpSessionListener</description>
+        <listener-class>controller.eventslistener.CountUserListener</listener-class>
+    </listener>
     <servlet>
         <servlet-name>ListController</servlet-name>
         <servlet-class>controller.student.ListController</servlet-class>
